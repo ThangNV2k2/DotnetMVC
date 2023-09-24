@@ -11,11 +11,13 @@ namespace RunGroopWebApp.Controllers
     {
         private readonly IClubRepository _clubRepository;
         private readonly IPhotoService _photoService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ClubController(IClubRepository clubRepository, IPhotoService photoService)
+        public ClubController(IClubRepository clubRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
         {
             _clubRepository = clubRepository;
             _photoService = photoService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> Index()
@@ -28,7 +30,51 @@ namespace RunGroopWebApp.Controllers
             var club = await _clubRepository.GetClubByIdAsync(id);
             return View(club);
         }
-        public IActionResult Create(int id)
+        public IActionResult Create()
+        {
+            var curUserId = _httpContextAccessor.HttpContext.User.GetUserId();
+            var createClubViewModel = new CreateClubViewModel { AppUserId = curUserId };
+            return View(createClubViewModel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateClubViewModel clubViewModel)
+        {
+            var photo = await _photoService.AddPhotoAsync(clubViewModel.Image);
+            var club = new Club
+            {
+                Title = clubViewModel.Title,
+                Description = clubViewModel.Description,
+                Image = photo.Url.ToString(),
+                ClubCategory = clubViewModel.ClubCategory,
+                AppUserId = clubViewModel.AppUserId,
+                Address = new Address
+                {
+                    Street = clubViewModel.Address.Street,
+                    City = clubViewModel.Address.City,
+                    State = clubViewModel.Address.State
+                }
+            };
+            _clubRepository.Add(club);
+            return RedirectToAction("Index");
+            //return View(clubViewModel);
+        }
+        public async Task<IActionResult> Edit(int id)
+        {
+            var club = await _clubRepository.GetClubByIdAsync(id);
+            if (club == null)
+                return View("Error");
+            var clubModel = new EditClubViewModel
+            {
+                Title = club.Title,
+                Description = club.Description,
+                AddressId = club.AddressId,
+                Address = club.Address,
+                ClubCategory = club.ClubCategory,
+                Url = club.Image
+            };
+            return View(clubModel);
+        }
+        /*public IActionResult Create(int id)
         {
 
             return View();
@@ -61,23 +107,7 @@ namespace RunGroopWebApp.Controllers
                 ModelState.AddModelError("", "Photo upload failed");
             }
             return View(clubViewModel);
-        }
-        public async Task<IActionResult> Edit(int id)
-        {
-            var club = await _clubRepository.GetClubByIdAsync(id);
-            if (club == null)
-                return View("Error");
-            var clubModel = new EditClubViewModel
-            {
-                Title = club.Title,
-                Description = club.Description,
-                AddressId = club.AddressId,
-                Address = club.Address,
-                ClubCategory = club.ClubCategory,
-                Url = club.Image
-            };
-            return View(clubModel);
-        }
+        }*/
         [HttpPost]
         public async Task<IActionResult> Edit(int id, EditClubViewModel clubViewModel)
         {

@@ -51,5 +51,48 @@ namespace RunGroopWebApp.Controllers
             TempData["Error"] = "Email or Password are wrong. Please, try game";
             return View(loginViewModel);
         }
+
+        public IActionResult Register()
+        {
+            var register = new RegisterViewModel();
+            return View(register);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(registerViewModel);
+            }
+            // check user
+            var user = await _userManager.FindByEmailAsync(registerViewModel.EmailAddress);
+            if(user != null) 
+            {
+                TempData["Error"] = "This email address is already use";
+                return View(registerViewModel); 
+            }
+            var newUser = new AppUser
+            {
+                UserName = registerViewModel.EmailAddress,
+                Email = registerViewModel.EmailAddress
+            };
+            var newResponse = await _userManager.CreateAsync(newUser, registerViewModel.Password);
+            if(newResponse.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(newUser, UserRoles.User);
+                return RedirectToAction("Index", "Race");
+            }
+            else
+            {
+                TempData["Error"] = "Error";
+            }
+            return View(registerViewModel);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Race");
+        }
     }
 }

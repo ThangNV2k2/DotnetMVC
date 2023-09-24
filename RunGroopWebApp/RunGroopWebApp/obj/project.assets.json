@@ -5139,11 +5139,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\leegj\\Documents\\Document\\C#\\ASP.NET\\MVC\\RunGroopWebApp\\RunGroopWebApp\\RunGroopWebApp.csproj",
+      "projectUniqueName": "C:\\Users\\leegj\\Documents\\Document\\C#\\ASP.NET\\MVC\\DotnetMVC\\RunGroopWebApp\\RunGroopWebApp\\RunGroopWebApp.csproj",
       "projectName": "RunGroopWebApp",
-      "projectPath": "C:\\Users\\leegj\\Documents\\Document\\C#\\ASP.NET\\MVC\\RunGroopWebApp\\RunGroopWebApp\\RunGroopWebApp.csproj",
+      "projectPath": "C:\\Users\\leegj\\Documents\\Document\\C#\\ASP.NET\\MVC\\DotnetMVC\\RunGroopWebApp\\RunGroopWebApp\\RunGroopWebApp.csproj",
       "packagesPath": "C:\\Users\\leegj\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\leegj\\Documents\\Document\\C#\\ASP.NET\\MVC\\RunGroopWebApp\\RunGroopWebApp\\obj\\",
+      "outputPath": "C:\\Users\\leegj\\Documents\\Document\\C#\\ASP.NET\\MVC\\DotnetMVC\\RunGroopWebApp\\RunGroopWebApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\leegj\\AppData\\Roaming\\NuGet\\NuGet.Config",
